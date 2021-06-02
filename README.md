@@ -1,5 +1,10 @@
 # Traffic Light
 
+Github:
+https://github.com/Mattias-R/prog2_exercise2_starter_code
+
+
+
 Das ist das Codetemplate für die zweite Übung in Programmierung 2.
 
 Ziel: Umsetzung des Observer Patterns und des Singleton Patterns

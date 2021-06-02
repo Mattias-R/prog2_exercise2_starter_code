@@ -1,6 +1,7 @@
 package trafficlight.gui;
 
 import trafficlight.ctrl.TrafficLightCtrl;
+import trafficlight.states.State;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +32,24 @@ public class TrafficLightGui extends JFrame implements ActionListener {
 
     private void initLights(TrafficLightCtrl ctrl) {
         //TODO implement a part of the pattern here
+        green = new TrafficLight(Color.green);
+        yellow = new TrafficLight(Color.yellow);
+        red = new TrafficLight(Color.red);
+
+
+
+        State x = ctrl.getGreenState();
+        State y = ctrl.getYellowState();
+        State z = ctrl.getRedState();
+        x.addObserver(green);
+        y.addObserver(yellow);
+        //y.addObserver(green);
+        z.addObserver(red);
+        //z.addObserver(yellow);
+
+        //trafficLightCtrl.addObserver(green);
+        //trafficLightCtrl.addObserver(yellow);
+        //trafficLightCtrl.addObserver(red);
         //create the TrafficLight
         //connect subject and observer
     }
@@ -64,7 +83,7 @@ public class TrafficLightGui extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e){
         if (ACTION_COMMAND_STOP.equals(e.getActionCommand())){
-           trafficLightCtrl.stop();
+            trafficLightCtrl.stop();
         }
     }
 }

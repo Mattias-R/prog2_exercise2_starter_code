@@ -1,9 +1,10 @@
 package trafficlight.ctrl;
-
+import trafficlight.Subject;
+import trafficlight.gui.TrafficLight;
 import trafficlight.gui.TrafficLightGui;
 import trafficlight.states.State;
 
-public class TrafficLightCtrl {
+public class TrafficLightCtrl{
 
     private State greenState;
 
@@ -18,13 +19,24 @@ public class TrafficLightCtrl {
     private final TrafficLightGui gui;
 
     private boolean doRun = true;
+    // static objekt. Das wird bei getInstance übergeben (Singleton pattern)
+    private static TrafficLightCtrl ctrl = null;
 
-    public TrafficLightCtrl() {
+    //war ursprünglich public, hab ich auf private umgestellt damit das Singleton pattern funktioniert
+    private TrafficLightCtrl() {
         super();
         initStates();
         gui = new TrafficLightGui(this);
         gui.setVisible(true);
         //TODO useful to update the current state
+        greenState.notifyObserver();
+    }
+    //Dadurch das der Construktor private ist kann nur noch über diese Methode ein TrafficLightCtrl erstellt werden
+    public static TrafficLightCtrl getInstance() {
+        if (ctrl == null) {
+            ctrl = new TrafficLightCtrl();
+        }
+        return ctrl;
     }
 
     private void initStates() {
@@ -33,6 +45,9 @@ public class TrafficLightCtrl {
             public State getNextState() {
                 previousState = currentState;
                 //TODO useful to update the current state and the old one
+                yellowState.notifyObserver();
+                greenState.notifyObserver();
+                System.out.println("grün");
                 return yellowState;
             }
             @Override
@@ -46,6 +61,9 @@ public class TrafficLightCtrl {
             public State getNextState() {
                 previousState = currentState;
                 //TODO useful to update the current state and the old one
+                //redState.notifyObserver();
+                yellowState.notifyObserver();
+                System.out.println("rot");
                 return yellowState;
             }
             @Override
@@ -60,10 +78,17 @@ public class TrafficLightCtrl {
                 if (previousState.equals(greenState)) {
                     previousState = currentState;
                     //TODO useful to update the current state and the old one
+                    redState.notifyObserver();
+                    yellowState.notifyObserver();
+                    System.out.println("gelb1");
                     return redState;
                 }else {
                     previousState = currentState;
                     //TODO useful to update the current state and the old one
+                    yellowState.notifyObserver();
+                    redState.notifyObserver();
+                    greenState.notifyObserver();
+                    System.out.println("gelb2");
                     return greenState;
                 }
             }
